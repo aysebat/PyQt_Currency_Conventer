@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout
-from PyQt6.QtWidgets import QLabel, QPushButton, QLineEdit
+from PyQt6.QtWidgets import QLabel, QPushButton, QLineEdit, QComboBox
 from bs4 import BeautifulSoup
 import requests
 
@@ -15,9 +15,12 @@ def get_currency(in_currency, out_currency):
 def show_currency():
     #this takes the input widget text
     input_text = float(text.text())
-    rate = get_currency("USD", "EUR")
+    in_cur = in_combo.currentText()
+    target_cur = target_combo.currentText()
+    rate = get_currency(in_cur, target_cur)
     output = round(input_text * rate, 3)
-    output_label.setText(str(output))
+    message = f"{input_text} {in_cur} is {output} {target_cur}"
+    output_label.setText(str(message))
 
 #CRETAE THE APPLICATION INSTANCE
 app = QApplication([])
@@ -26,6 +29,17 @@ window.setWindowTitle('Sentence Maker')
 
 #Create a vertical Layout V symbol before Q represent the vertical
 layout = QVBoxLayout()
+
+#add the drop down list
+in_combo = QComboBox()
+currencies = ['USD', 'EUR', 'INR']
+in_combo.addItems(currencies)
+layout.addWidget(in_combo)
+
+target_combo = QComboBox()
+target_combo.addItems(currencies)
+layout.addWidget(target_combo)
+
 
 #input text
 text = QLineEdit()
